@@ -1,0 +1,14 @@
+plot(app.UIAxes,eall)
+drawnow
+[file,path] = uiputfile('*.csv');
+filename = fullfile(path,file);
+csvwrite(filename,eall);
+
+謀Х勍預揶禮で卅術
+篩菽揄蝿厖泰荐愆禊
+爐秤Б秤勍奏甬茲拝鼠蚋�蚋
+偏柄狠怦預倉
+篩葯∫吼�菻罫篩で卅恵Ж噤査膏藕叢項砺郵賭�丗篁
+肪徑蝿勞儿狹徑÷還港匱坿繋 熔簔 荊莊噬哩�  却簡垤礙畉差刮
+謀諭却楳友蝿卅儿鑑 ぴ巌窯猴�菻叢宏倪私顔鑑  
+便慣蚋臓臟菻о仕菻 級友�預揄
