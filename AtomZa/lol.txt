@@ -1,1 +1,25 @@
-awdawdawdwad
+ dx = 5*(10^-6);
+        mmfmode = 30;
+        ifinal = ((ncoremmf - ncladdingmmf(qq,nn))/dx);
+        epscladdingmmf = ncladdingmmf(qq,nn)^2; %permittivity of medium surrounding no core mmf
+        tempmmf = zeros(1,round(ifinal)); %empty array of effective indices of mmf to be assigned in the next loop
+        mode = 0;
+        pointer = ncoremmf;
+        for ii = 0:ifinal
+            try 
+                chk = fzero(@characeqnmmf,[(ncladdingmmf(qq,nn) + (ii*increment)),(ncladdingmmf(qq,nn) + ((ii+1)*increment))]);
+                mode = mode+1;
+                tempmmf(mode) = chk;
+                pointer = pointer-dx;
+            catch
+                if(pointer-dx < ncladdingmmf)
+                    break;
+                end
+            end
+               if(mode>= mmfmode)
+                 break;
+               end
+               if(mode > 1)
+                 dx = abs(tempmmf(mode-1)-tempmmf(mode));
+               end
+        end
