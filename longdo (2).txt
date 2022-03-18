@@ -1,0 +1,113 @@
+clearvars -except
+close all
+clc
+%-----------------------------------------------------------------------------%
+ global ncoresmf ncladdingsmf asmf ncoremmf ncladdingmmf ammf k0 nmedium aair 
+ncoresmf = 1.4504;                                  %core refractive index of smf
+ncladdingsmf = 1.447;                              %cladding refractive index of smf
+asmf = 4.1;                                              %radius of smf
+ncoremmf = 1.443;                                   %refractive index of no core mmf
+nmedium = 1.0464;                                  %medium refractive index
+ncladdingmmf = nmedium;                        %refractive index of medium surrounding no core mmf
+ammf = 62.5;                                            %radius of no core mmf
+epscoresmf = ncoresmf^2;                        %core pzermittivity of smf
+epscladdingsmf = ncladdingsmf^2;            %cladding permittivity of smf
+epscoremmf = ncoremmf^2;                      %permittivity of no core mmf
+epscladdingmmf =  ncladdingmmf^2;         %permittivity of medium surrounding no core mmf
+k0 = 2*pi/0.633;                                       %wave number
+aair = 87.5;                                               %radius of medium
+rarrsmf = -asmf:0.01:asmf;                       %array of r from -asmf to asmf
+rarrcladding1 = -ammf:0.01:(-asmf-0.01); %array of r from -ammf to -asmf
+rarrcladding2 = (asmf + 0.01):0.01:ammf; %array of r from asmf to ammf
+rarrair1 = -aair:0.01:(-ammf-0.01);            %array of r from -aair to -ammf
+rarrair2 = (ammf + 0.01):0.01:aair;            %array of r frin ammf to aair
+rarrall = [rarrair1 rarrcladding1 rarrsmf rarrcladding2 rarrair2]; %array of r from -aair to aair
+%===============varible forparloop==================%
+wavelength = (0.3:0.001:0.6);
+zarr = gpuArray(0:12:60000);
+lamb_coup = zeros(length(wavelength),length(zarr));
+ifinal = (ncoresmf - ncladdingsmf)/0.00005;
+nclsmf = ncladdingsmf;
+ncosmf = ncoresmf;
+nclmmf = ncladdingmmf;
+ncommf = ncoremmf;
+
+neffsmf = zeros(3,length(wavelength));
+usmf = zeros(1,length(wavelength));
+wsmf = zeros(1,length(wavelength));
+
+parfor WL = (1:length(wavelength)) % can converted back to "for"
+    dx = 0.00005;
+    wavenum = 2*pi/(wavelength(WL));
+    chasmf = @(neff) solsmf(neff,wavenum, 4.1 ,ncosmf, nclsmf);  % assignt parameter to function
+
+    smfneff = zeros(1,round(ifinal)); 
+    for i = 0:ifinal
+      try 
+          chk = fzero(chasmf,[(nclsmf + (i*dx)),(nclsmf + ((i+1)*dx))]);
+      catch
+         smfneff(i+1) = 0;
+         continue
+      end
+        smfneff(i+1) = chk;
+%         break
+    end
+    smfneff = smfneff(smfneff ~= 0).';
+
+%     make dimention of array always 3
+    while length(smfneff) ~= 3 
+            smfneff = [NaN; smfneff]
+    end
+    neffsmf(:,WL) = smfneff;
+%selected only fundamental mode (maximum neff)
+end
+
+
+neffmmf = zeros(30,length(wavelength));
+iifinal = (ncoremmf - ncladdingmmf)/0.000005;
+
+% use only 30 mode near core index
+parfor WL = (1:length(wavelength)) % can converted back to "for"
+    dx = 0.000005;
+    wavenum = 2*pi/(wavelength(WL));
+    chammf = @(neff) solmmf(neff,wavenum, 62.5 ,ncommf, nclmmf);  % assignt parameter to function
+    smfneff = zeros(1,round(iifinal)); 
+    neffarrmmf = zeros(1,round(iifinal)); 
+    flag = 0;
+
+    for ii = 0:iifinal
+        try 
+          chk= fzero(chammf,[(ncommf - ((ii+1)*dx)),(ncommf - (ii*dx))]);
+        catch
+          neffarrmmf(ii+1) = 0;
+          continue
+        end
+     neffarrmmf(ii+1) = chk;
+     flag = flag+1;
+     if(flag == 30)
+         break;
+     end
+    end
+    neffarrmmf = neffarrmmf(neffarrmmf ~= 0);
+    neffmmf(:,WL) = neffarrmmf;
+end
+
+
+
+
+
+
+
+
+
+function f = solsmf(neff,k0, asmf ,ncoresmf, ncladdingsmf)
+u = k0.*asmf.*(sqrt(ncoresmf^2 - (neff.^2)));
+w = k0.*asmf.*(sqrt((neff.^2) - ncladdingsmf^2));
+f = ((besselj(0,u))*(w)*(besselk(1,w))) - ((besselk(0,w))*(u)*(besselj(1,u)));  
+end
+
+function f = solmmf(neff,k0, ammf ,ncoremmf, ncladdingmmf)
+u = k0.*ammf.*(sqrt(ncoremmf^2 - (neff.^2)));
+w =  k0.*ammf.*(sqrt((neff.^2) - ncladdingmmf^2));
+f = ((besselj(0,u)).*(w).*(besselk(1,w,1))) - ((besselk(0,w,1)).*(u).*(besselj(1,u)));  
+end
