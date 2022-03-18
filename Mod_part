@@ -1,0 +1,136 @@
+Clear all
+clc
+% dimension in this work is micrometer
+%---------------------------non-fiber parameter-------------------------------%
+wavelength      = 0.633;         %wavelength array for testing
+aair            = 87.5;          %radius of medium
+nmedium         = 1.0003;        % mean n-air of temperature/wavelength
+aNP             = 0.5;           % Nanoparticle layers tickness
+%-----------------------fiber parameter--------------------------------------%
+asmf            = 4.1;           %radius of smf
+ncoresmf        = 1.4504;        %core refractive index of smf
+ncladdingsmf    = 1.447;         %cladding refractive index of smf
+ammf            = 62.5;          %radius of no core mmf
+ncoremmf        = 1.443;         %refractive index of no core mmf
+ncladdingmmf    = nmedium;       %refractive index of medium surrounding no core mmf
+zarr            = (0:25:110000); %Propagation distant array
+Alpha           = 0.05;          %NPs attenuation coefficient
+mmfmode         = 30;   
+%-----------------------------------------------------------------------------%
+rarrcladding1   = -ammf:0.01:(-asmf-0.01); %array of r from -ammf to -asmf
+rarrcladding2   = (asmf + 0.01):0.01:ammf; %array of r from asmf to ammf
+rarrair1        = -aair:0.01:(-ammf-0.01); %array of r from -aair to -ammf
+rarrair2        = (ammf + 0.01):0.01:aair; %array of r frin ammf to aair
+rarrall         = [rarrair1 rarrcladding1 rarrsmf rarrcladding2 rarrair2]; %array of r from -aair to aair
+eta = zeros(length(zarr),length(wavelength));
+dx = 0.0001;
+ifinal = ((ncoresmf - ncladdingsmf)/dx);
+%----------------------finding mode in smf--------------------------------%
+
+
+for WL = 1:length(wavelength)
+    wavenum = 2*pi/wavelength(WL);
+    characeqnsmf = @(neff) characeqn(neff,ncoresmf,ncladdingsmf,wavenum,asmf);
+    for i = 0:ifinal
+      try 
+          chk = fzero(characeqnsmf,[(ncoresmf-((i+1)*dx)),ncoresmf-(i*dx)]);
+          neffsmf = chk;
+          break;
+      catch 
+          continue
+      end
+    end
+
+    usmf =  wavenum*asmf*sqrt(ncoresmf^2 - neffsmf^2);   
+    wsmf =  wavenum*asmf*sqrt(neffsmf^2 - ncladdingsmf^2);
+
+    csmf = (besselj(0,usmf))/(besselk(0,wsmf));                    %scaling coefficient
+    ecladdingsmf = csmf.*(besselk(0,(wsmf.*rarrcladding2./asmf))); %field where asmf < r < ammf
+    eair = ecladdingsmf(end);
+end
+
+parfor WL = 1:length(wavelength)
+    wavenum = 2*pi/wavelength(WL);
+    neffarrmmf = zeros(1,mmfmode);
+    dx = 5*(10^-6);
+    mode = 0;
+    pointer = ncoremmf;
+
+    characeqnmmf = @(neff) characeqn(neff,ncoremmf,ncladdingmmf,wavenum,ammf);
+    for ii = 0:ifinal
+        try 
+          chk = fzero(characeqnmmf,[pointer-dx,pointer]);
+          mode = mode+1;
+          neffarrmmf(mode) = chk;
+          pointer = pointer-dx;
+        catch
+          if(pointer-dx < ncladdingmmf)
+               break;
+          end
+          continue
+        end
+           if(mode>= mmfmode)
+               break;
+           end
+           if(mode > 1)
+            dx = abs(neffarrmmf(mode-1)-neffarrmmf(mode));
+           end
+    end
+    neffarrmmf = neffarrmmf(neffarrmmf ~= 0);
+
+%------------------------finding u and w for each mode in mmf----------------------------------%
+    uarrmmf = zeros(1,mmfmode); %u of each mode in mmf
+    warrmmf = zeros(1,mmfmode); %w of each mode in mmf
+    carr = zeros(1,mmfmode); %scaling coefficient
+    for j = 1:length(neffarrmmf)
+        uarrmmf(j) =  wavenum*ammf*sqrt(ncoresmf^2 - neffarrmmf(j)^2);   
+        warrmmf(j) =  wavenum*ammf*sqrt(neffarrmmf(j)^2 - ncladdingsmf^2);
+        carr(j) = (besselj(0,uarrmmf(j)))/(besselk(0,warrmmf(j),1));
+    end
+%-----------------------finding variable pj and aj for each mode in mmf-----------------------------------------%
+pj = zeros(mmfmode); %empty array of parameter pj 
+aj = zeros(mmfmode); %empty array of parameter aj
+
+    for nn = 1:length(neffarrmmf)
+        funpj1 = @(r) ((abs(besselj(0,(uarrmmf(nn).*r/ammf)))).^2).*r;          %function of pj where r is between 0 and ammf
+        funpj2 = @(r) ((abs(carr(nn).*besselk(0,(warrmmf(nn).*r/ammf)))).^2).*r; %function of pj where r is greater than ammf
+        pj(nn) = ((integral(funpj1,0,ammf)) + (integral(funpj2,ammf,Inf))).*2.*pi;
+
+        funaj1 = @(r) ((besselj(0,(usmf.*r./asmf))).*(conj(besselj(0,(uarrmmf(nn).*r/ammf))))).*r;      %function where r is between 0 and asmf
+        funaj2 = @(r) ((csmf.*besselk(0,(wsmf.*r./asmf))).*(conj(besselj(0,(uarrmmf(nn).*r/ammf))))).*r; %function where r is between asmf and ammf
+        funaj3 = @(r) ((eair).*(conj(carr(nn).*besselk(0,(warrmmf(nn).*r/ammf))))).*r;                    %function where r is greater than ammf
+
+        aj(nn) = integral(funaj1,0,asmf) + integral(funaj2,asmf,ammf) + integral(funaj3,ammf,Inf).*2.*pi./pj(nn);
+    end
+%--------------------------------finding Zeta  ----------------------------------%
+      zetammf = zeros(1,mmfmode);
+    for nn = 1:length(neffarrmmf)
+
+        topfun = @(r)        
+        botfun = @(r)  
+    
+        zetammf(nn) = integral(funaj1,0,asmf) + integral(funaj2,asmf,ammf) + integral(funaj3,ammf,Inf).*2.*pi./pj(nn);
+    end
+
+ %-----------------------finding coupling efficiency of mmf with interference----------------------------------%
+    betammf = neffarrmmf.*wavenum; %array of propagation constants of each mode
+    funescore = @(r) ((abs(besselj(0,(usmf.*r./asmf)))).^2).*r;
+    funesclad = @(r) ((abs(csmf*besselk(0,(wsmf.*r./asmf)))).^2).*r;
+    ps = (integral(funescore,0,asmf) + integral(funesclad,asmf,ammf)).*(2*pi); %assume third integral is zero
+    ajbar = aj.*(sqrt(pj./ps));
+
+    nn = 1:length(zarr);
+
+    P1 = reshape(((betammf - betammf.')*1j).'+((zetammf - zetammf.')*Alpha/2).',[],1).*zarr(nn);
+    P2 = reshape(log((ajbar.^2).*((conj(ajbar)).^2).'),1,[]);
+    P3 = sum(exp(P2+P1.'),2);
+
+    eta(:,WL) =  abs(reshape(sum(P3,2),[],1)).';    
+end
+%========================= function ==========================%
+
+function f = characeqn(neff,ncore,nclad,k,a)
+u = k*a*sqrt(ncore^2 - neff^2);
+w = k*a*sqrt(neff^2 - nclad^2);
+f = w*besselj(0,w)*besselk(1,w,1)-u*besselk(0,w,1)*besselj(1,u);
+end
