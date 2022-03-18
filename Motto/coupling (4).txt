@@ -1,0 +1,21 @@
+funescore = @(r) ((abs(besselj(0,(usmf.*r./asmf)))).^2).*r;
+funesclad = @(r) ((abs(c*besselk(0,(wsmf.*r./asmf)))).^2).*r;
+ps = (integral(funescore,0,asmf) + integral(funesclad,asmf,ammf)).*(2*pi); %assume third integral is zero
+ajbar = aj.*(sqrt(pj./ps));
+ajbar = ajbar(1:25);
+betammf1 = betammf(1:25);
+disp('my new method (coupling eff)')
+tic
+
+nn = 1:length(zarr);
+
+P100= reshape(((betammf1 - betammf1.')*1j).',[],1);
+P110 = P100.*zarr(nn);
+P220= reshape(log((ajbar.^2).*((conj(ajbar)).^2).'),1,[]);
+P330 = sum(exp(P220+P110.'),2);
+
+c1oup =  abs(reshape(sum(P330,2),[],1)).';
+toc
+
+figure()
+plot(zarr,10.*log(c1oup)./log(10))
