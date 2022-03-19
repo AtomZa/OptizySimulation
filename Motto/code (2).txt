@@ -1,0 +1,29 @@
+
+betammf = gpuArray(neffarrmmf.*k0); %array of propagation constants of each mode
+zarr = gpuArray(141500:2:144000);
+aj = gpuArray(aj);
+earrallmmf = gpuArray(earrallmmf(:,4751:8750));
+
+disp 'mmf interferer'
+tic
+
+
+nn   = int16(1:length(zarr));
+mm = int16(1:length(rarrall(4751:8750)));
+   
+sae = (earrallmmf(:,mm)).*aj.';
+szb = exp(1j*(betammf.').*(zarr(nn))); 
+
+einter = (szb.')*sae;
+iinter = gather(abs(einter)).^2; %array of field intensity of multimode interference
+einter = gather(einter.');
+zarr = gather(zarr);
+toc
+
+disp 'countour time'
+tic
+figure()
+contourf(rarrall(4751:8750),zarr,iinter,'LineStyle','none','LevelList',0:0.01:1);
+hold on
+colormap(jet)
+toc
