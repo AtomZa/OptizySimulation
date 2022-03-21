@@ -1,2 +1,2 @@
     #OptizySimulation
-    <h3>Software Developer</h3><br />
+    <h3>Software Developer</h3>
