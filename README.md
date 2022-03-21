@@ -2,16 +2,16 @@
 Software Developer
 Athiwat Thongyoo<br />
 Suphavit Thaneerat<br />
-<br />
+<br /><br />
 Collaborator
-P'Nac
-P'Firm
-<br />
-Advisor
-Charusluk Viphavakit, Ph.D.
-Dr. Wisarn Patchoo
-Dr. Waleed Mohammed
-Dr. Kankan Swargiary
-<br />
+P'Nac<br />
+P'Firm<br />
+<br /><br />
+Advisor<br />
+Charusluk Viphavakit, Ph.D.<br />
+Dr. Wisarn Patchoo<br />
+Dr. Waleed Mohammed<br />
+Dr. Kankan Swargiary<br />
+<br /><br />
 Nano Engineering, International School of Engineering, Chulalongkorn University<br />
 Bangkok University Center of Research in Optoelectronics, Communications and Computational Systems
