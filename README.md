@@ -1,4 +1,3 @@
-<html>
 
     <h3>Software Developer</h3><br />
 
@@ -35,6 +34,3 @@
     <a href="https://bucroccs.bu.ac.th/index.php">
     Bangkok University Center of Research in Optoelectronics, Communications and Computational Systems
     </a>
-    
-
-</html>
