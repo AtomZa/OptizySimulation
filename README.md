@@ -1,9 +1,9 @@
 # OptizySimulation
-Software Developer
+Software Developer<br />
 Athiwat Thongyoo<br />
 Suphavit Thaneerat<br />
 <br /><br />
-Collaborator
+Collaborator<br />
 P'Nac<br />
 P'Firm<br />
 <br /><br />
