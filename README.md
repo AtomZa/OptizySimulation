@@ -1,14 +1,5 @@
-# OptizySimulation
-img {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  width: 150px;
-}
-
-
 <h3>Software Developer</h3><br />
-<img class="img" src="https://media-exp1.licdn.com/dms/image/C4E03AQE097OfHatkPQ/profile-displayphoto-shrink_800_800/0/1608647227249?e=2147483647&v=beta&t=XDVV_JdCsS_2OBFQK9tDKVerfjMiuYNf-jnOLfGsmkc" />
+<img style="width:100px;height:100px" src="https://media-exp1.licdn.com/dms/image/C4E03AQE097OfHatkPQ/profile-displayphoto-shrink_800_800/0/1608647227249?e=2147483647&v=beta&t=XDVV_JdCsS_2OBFQK9tDKVerfjMiuYNf-jnOLfGsmkc" />
 Athiwat Thongyoo<br />
 Suphavit Thaneerat<br />
 <br /><br />
