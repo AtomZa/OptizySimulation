@@ -38,7 +38,7 @@ P'Firm<br />
 <h3>Institution</h3>
 <div>
 <img style="width:100px;height:100px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrCZ09gKrSqWt-e6wz2GUw8hyBCE3CDNQM3tqseNJTuMJ8gH_FOLaK3VskPV-0W2Li7Iw&usqp=CAU" />
-<img style="width:500px;height:100px" src="https://www.eng.chula.ac.th/wp-content/uploads/2017/03/Logo-300x55.jpg" />
+<img style="width:400px;height:100px" src="https://charuslukv.files.wordpress.com/2018/08/pic-ise-logo.png?w=1024" />
 </div>
 <a href="http://www.ise.eng.chula.ac.th/academics/nano/info"> 
 Nano Engineering, International School of Engineering, Chulalongkorn University<br />
