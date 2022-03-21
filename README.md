@@ -1,5 +1,5 @@
 # OptizySimulation
-Software Developer<br />
+<h1>Software Developer</h1><br />
 Athiwat Thongyoo<br />
 Suphavit Thaneerat<br />
 <br /><br />
