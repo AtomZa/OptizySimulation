@@ -17,7 +17,7 @@
 <a href = "https://charuslukv.wordpress.com/"> Charusluk Viphavakit, Ph.D. </a> <br />
 </div>
 <div>
-<img style="width:100px;height:100px" src="https://media-exp1.licdn.com/dms/image/D5635AQEZElN9gtoqPw/profile-framedphoto-shrink_400_400/0/1630771392911?e=1647946800&v=beta&t=wqTdg6b39sTDecV78-EMYu5Sp2uFShvld2pdPpY6-tM" />
+<img style="width:100px;height:100px" src="https://media-exp1.licdn.com/dms/image/D5635AQEZElN9gtoqPw/profile-framedphoto-shrink_800_800/0/1630771392911?e=1648753200&v=beta&t=Jk7wQX0PoNIx8TRikCHOTmmmADrxCYCrH7MX8sYHptI" />
 <a href = "https://www.linkedin.com/in/dr-wisarn-patchoo-a17b718b/?originalSubdomain=th"> Dr. Wisarn Patchoo </a><br />
 </div>
 <div>
