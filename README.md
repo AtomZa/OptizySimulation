@@ -28,6 +28,10 @@
 <img style="width:100px;height:100px" src="https://media-exp1.licdn.com/dms/image/C5603AQH9xTwrsQ3aeQ/profile-displayphoto-shrink_400_400/0/1642475564389?e=2147483647&v=beta&t=7uOudmKaK7L9bLtOVxOQyYUpU6i8QmQb8qnEqAFYTS0" />
 <a href = "https://www.linkedin.com/in/dr-kankan-s-33b128a2/details/certifications/">Dr. Kankan Swargiary</a><br />
 </div>
+<div>
+<img style="width:100px;height:100px" src="https://ieeexplore.ieee.org/mediastore_new/IEEE/content/freeimages/7361/9580557/9513319/patha-3104766-small.gif" />
+<a href = "https://ieeexplore.ieee.org/author/37085750791">Dr. Akhilesh Kumar Pathak</a><br />
+</div>
 <br />
       
 <h3>Collaborator</h3><br />
