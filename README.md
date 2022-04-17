@@ -1,5 +1,5 @@
 # OptizySimulation
-<h3>Software Developer</h3><br />
+<h3>Software Engineer!</h3><br />
 
 <div>
 <img style="width:100px;height:100px" src="https://media-exp1.licdn.com/dms/image/C4E03AQE097OfHatkPQ/profile-displayphoto-shrink_800_800/0/1608647227249?e=2147483647&v=beta&t=XDVV_JdCsS_2OBFQK9tDKVerfjMiuYNf-jnOLfGsmkc" />
