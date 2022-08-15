@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optizy Simulation</title>
+</head>
+
+<style>
+    h3 {
+        text-align: center;
+    }
+    .column {
+        float: left;
+    }
+
+    .left {
+        width: 20%;
+    }
+
+    .right {
+        width: 40%;
+    }
+
+    .middle {
+        width: 40%;
+    }
+</style>
+
+<body>
+    <h1>Optizy Simulation</h1>
+    <p>Athiwat T. / Suphavit T.</p>
+    <hr>
+    <div class="row">
+        <div class="column">
+            <h3>Parameters</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                ncoresmf:
+                <br>
+                <input type="text" name="ncoresmf" value="{{ ncoresmf }}">
+                <br><br>
+                ncladdingsmf:
+                <br>
+                <input type="text" name="ncladdingsmf" value="{{ ncladdingsmf }}">
+                <br><br>
+                asmf:
+                <br>
+                <input type="text" name="asmf" value="{{ asmf }}">
+                <br><br>
+                acore:
+                <br>
+                <input type="text" name="ncoremmf" value="{{ ncoremmf }}">
+                <br><br>
+                nmedium:
+                <br>
+                <input type="text" name="nmedium" value="{{ nmedium }}">
+                <br><br>
+                aair:
+                <br>
+                <input type="text" name="aair" value="{{ aair }}">
+                <br><br>
+                ammf:
+                <br>
+                <input type="text" name="ammf" value="{{ ammf }}">
+                <br><br>
+                zmmf:
+                <br>
+                <input type="text" name="zmmf" value="{{ zmmf }}">
+                <br><br>
+                <h3><input type="submit" value="Simulate"></h3>
+            </form>
+        </div>
+        <div class="column">
+            <h3>Singlemode</h3>
+            {{ graph|safe }}
+        </div>
+        <div class="column">
+            <h3>Multimode</h3>
+            {{ mmf|safe }}
+        </div>
+    </div>
+</body>
+</html>
